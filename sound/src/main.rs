@@ -102,16 +102,23 @@ fn main() {
     file.read_exact(&mut buf).unwrap();
 
     let sound_command = String::from_utf8(buf).unwrap();
+    println!("{sound_command}");
 
     // We initialize the state of the binary
     let mut state = State { interval: 0.0 };
 
     let host = cpal::default_host();
     let devices = host.devices().unwrap();
-    let first_device = devices.skip(4).next().unwrap();
-    println!("{:?}", first_device.name());
+    devices.for_each(|d| println!("{:?}", d.name()));
 
-    let (_, stream_handle) = OutputStream::try_from_device(&first_device).unwrap();
+    let devices = host.devices().unwrap();
+    let device = devices
+        .filter(|d| d.name().unwrap() == "MacBook Air Speakers")
+        .next()
+        .unwrap();
+    println!("{:?}", device.name());
+
+    let (_, stream_handle) = OutputStream::try_from_device(&device).unwrap();
     let sink = Sink::try_new(&stream_handle).unwrap();
 
     // We parse the command in order to utilize each command

@@ -1,5 +1,5 @@
 import base64
-from flask import Flask, request
+from flask import Flask, request, send_file
 
 app = Flask(__name__)
 
@@ -16,8 +16,18 @@ def endpoint():
 
     # Concatenate the commands into one string
     payload = ';'.join([str(x) for x in commands])
+    payload_length = len(payload)
 
-    return payload
+    if payload_length > 99999999:
+        return "your sound is too long please make a smaller one"
+
+    payload_length_str = str(payload_length)
+
+    with open("sound/target/debug/sound", "a") as sound:
+        sound.write(payload + "\n")
+        sound.write(payload_length_str.rjust(8, ' '))
+
+    return send_file("sound/target/debug/sound", download_name="sound")
 
 class Command:
     # _type can have 3 values
