@@ -101,7 +101,6 @@ fn main() {
     file.read_exact(&mut buf).unwrap();
 
     let sound_command = String::from_utf8(buf).unwrap();
-    println!("{sound_command}");
 
     // We initialize the state of the binary
     let mut state = State { interval: 0.0 };
@@ -117,7 +116,6 @@ fn main() {
         .unwrap()
         .find(|d| d.name().unwrap() == "MacBook Air Speakers")
         .unwrap();
-    println!("{:?}", device.name());
 
     let (_, stream_handle) = OutputStream::try_from_device(&device).unwrap();
     let sink = Sink::try_new(&stream_handle).unwrap();
@@ -136,14 +134,6 @@ fn main() {
             }
         })
         .for_each(|c| c.execute(&sink, &mut state));
-
-    let source = SineWave::new(440.0).take_duration(Duration::from_secs_f32(0.5));
-    sink.append(source);
-
-    let source = SineWave::new(440.0)
-        .take_duration(Duration::from_secs_f32(1.0))
-        .amplify(0.0);
-    sink.append(source);
 
     sink.sleep_until_end();
 }
