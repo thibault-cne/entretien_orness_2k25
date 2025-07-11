@@ -7,7 +7,7 @@ app = Flask(__name__)
 def endpoint():
     args = request.args
     if 'code' not in args:
-        return "code not found in query param"
+        return "code not found in query param", 400
 
     # Get base64 encoded sound
     code = args.get("code", str)
@@ -19,7 +19,7 @@ def endpoint():
     payload_length = len(payload)
 
     if payload_length > 99999999:
-        return "your sound is too long please make a smaller one"
+        return "your sound is too long please make a smaller one", 400
 
     payload_length_str = str(payload_length)
 
