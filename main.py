@@ -1,6 +1,8 @@
 import os
+import sys
 import base64
 from flask import Flask, request, send_file
+from ua_parser import parse
 
 app = Flask(__name__)
 
@@ -9,6 +11,10 @@ def endpoint():
     args = request.args
     if 'code' not in args:
         return "code not found in query param", 400
+
+    user_agent = parse(request.user_agent.string)
+    print(user_agent.os, file=sys.stderr)
+
 
     # Get base64 encoded sound
     code = args.get("code", str)
@@ -24,7 +30,7 @@ def endpoint():
 
     payload_length_str = str(payload_length)
 
-    os.system("rm sound_copy")
+    os.system("rm -rf sound_copy")
     os.system("cp sound sound_copy")
 
     with open("sound_copy", "a") as sound:
@@ -74,4 +80,4 @@ def parse_input(input: str) -> [Command]:
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000)
+    app.run(host="0.0.0.0", port=8080)
