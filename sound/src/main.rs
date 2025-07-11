@@ -2,7 +2,6 @@ use std::io::Read;
 use std::io::Seek;
 use std::time::Duration;
 
-use rodio::Device;
 use rodio::DeviceTrait;
 use rodio::cpal;
 use rodio::cpal::traits::HostTrait;
@@ -108,13 +107,15 @@ fn main() {
     let mut state = State { interval: 0.0 };
 
     let host = cpal::default_host();
-    let devices = host.devices().unwrap();
-    devices.for_each(|d| println!("{:?}", d.name()));
 
-    let devices = host.devices().unwrap();
-    let device = devices
-        .filter(|d| d.name().unwrap() == "MacBook Air Speakers")
-        .next()
+    #[cfg(not(target_os = "macos"))]
+    let device = host.default_output_device().unwrap();
+
+    #[cfg(target_os = "macos")]
+    let device = host
+        .devices()
+        .unwrap()
+        .find(|d| d.name().unwrap() == "MacBook Air Speakers")
         .unwrap();
     println!("{:?}", device.name());
 
