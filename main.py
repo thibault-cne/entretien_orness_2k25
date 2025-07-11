@@ -1,21 +1,23 @@
-# from base64 import decode
-# from flask import Flask, request
+import base64
+from flask import Flask, request
 
-# app = Flask(__name__)
+app = Flask(__name__)
 
-# @app.route("/", methods = ["GET"])
-# def endpoint():
-#     args = request.args
+@app.route("/", methods = ["GET"])
+def endpoint():
+    args = request.args
+    if 'code' not in args:
+        return "code not found in query param"
 
-#     # Get base64 encoded sound
-#     code = args.get("code", str)
+    # Get base64 encoded sound
+    code = args.get("code", str)
+    decoded_code = base64.b64decode(code).decode('utf-8')
+    commands = parse_input(decoded_code)
 
-#     if code is None:
-#         return "code not found in query param"
+    # Concatenate the commands into one string
+    payload = ';'.join([str(x) for x in commands])
 
-#     decoded_code = decode(code)
-#     
-#     pass
+    return payload
 
 class Command:
     # _type can have 3 values
@@ -27,11 +29,14 @@ class Command:
         self._type = type
         self._value = value
 
+    def __str__(self):
+        return self._type + " " + self._value
+
     def __repr__(self):
         return "Command: " + self._type + " " + self._value
 
 
-def parse_input(input: str):
+def parse_input(input: str) -> [Command]:
     commands = []
     
     i = 0
@@ -55,4 +60,4 @@ def parse_input(input: str):
 
 
 if __name__ == '__main__':
-    print(parse_input("(interval 0.5) C4 C4 C4 D4 E4 D4 C4 E4 D4 D4 C4 (sleep 1) (interval 0.8) C4 C4 C4 D4 E4 D4 C4 E4 D4 D4 C4"))
+    app.run()
