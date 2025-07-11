@@ -11,6 +11,12 @@ cd sound
 cargo build
 ```
 
+Then we need to copy the binary created in order for the API to work correctly (from the root of the repo):
+
+```
+cp sound/target/release/sound .
+```
+
 Then you can create a new python virtualenv (from the root of the repo):
 
 ```

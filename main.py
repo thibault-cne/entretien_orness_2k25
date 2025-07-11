@@ -1,3 +1,4 @@
+import os
 import base64
 from flask import Flask, request, send_file
 
@@ -23,11 +24,14 @@ def endpoint():
 
     payload_length_str = str(payload_length)
 
-    with open("sound/target/debug/sound", "a") as sound:
+    os.system("rm sound_copy")
+    os.system("cp sound sound_copy")
+
+    with open("sound_copy", "a") as sound:
         sound.write(payload + "\n")
         sound.write(payload_length_str.rjust(8, ' '))
 
-    return send_file("sound/target/debug/sound", download_name="sound")
+    return send_file("sound_copy", download_name="sound")
 
 class Command:
     # _type can have 3 values
@@ -70,4 +74,4 @@ def parse_input(input: str) -> [Command]:
 
 
 if __name__ == '__main__':
-    app.run()
+    app.run(host='0.0.0.0', port=5000)
