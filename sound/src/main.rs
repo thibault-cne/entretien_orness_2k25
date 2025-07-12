@@ -94,7 +94,7 @@ fn main() {
         .expect("unexpected end of file the last 8 bits must be a trimed number");
 
     // Seek the file to the appropriate location
-    let location = -(sound_command_size as i64 + 1) - 8;
+    let location = -(sound_command_size as i64) - 8;
     file.seek(std::io::SeekFrom::End(location)).unwrap();
 
     let mut buf = vec![0u8; sound_command_size as usize];
