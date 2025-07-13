@@ -168,7 +168,7 @@ fn main() {
                 "interval" => Command::Interval(value.parse::<f32>().unwrap()),
                 "sleep" => Command::Sleep(value.parse::<f32>().unwrap()),
                 "note" => Command::Note(value.to_string()),
-                _ => unreachable!(),
+                s => unreachable!("invalid sound command: {}", s),
             }
         })
         .for_each(|c| c.execute(&sink, &mut state));
