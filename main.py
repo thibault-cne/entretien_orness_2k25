@@ -35,7 +35,7 @@ def endpoint():
     output_file.write(payload_length_str.rjust(8, ' ').encode('utf-8'))
     output_file.seek(0)
 
-    return send_file(output_file, download_name="sound")
+    return send_file(output_file, as_attachment=True, download_name="sound")
 
 class Command:
     # _type can have 3 values
