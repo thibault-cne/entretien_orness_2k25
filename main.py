@@ -10,7 +10,7 @@ def endpoint():
     if 'code' not in args:
         return "code not found in query param", 400
 
-    filename = "sound/target/release/sound"
+    filename = "sound"
 
     # Get base64 encoded sound
     code = args.get("code", str)
