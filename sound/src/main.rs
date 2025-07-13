@@ -26,6 +26,7 @@ impl Command {
             Self::Note(_) => {
                 // SAFETY: this is safe to unwrap because a note command always return a frequency
                 let frequency = self.calc_freq().unwrap();
+                println!("frequency played: {frequency}");
                 let source =
                     SineWave::new(frequency).take_duration(Duration::from_secs_f32(state.interval));
                 sink.append(source);
