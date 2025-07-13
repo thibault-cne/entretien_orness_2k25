@@ -4,28 +4,13 @@ This is an interview I had for Orness in 2k25.
 
 ## Lauch the project
 
-In order to launch the project you first have to build the rust project:
+You can now launch the project using `Docker`. To do so follow the next steps:
 
 ```
-cd sound
-cargo build
+docker build -t orness_interview_2k25 .
+docker run --rm -p 8080:8080 orness_interview_2k25
 ```
 
-Then we need to copy the binary created in order for the API to work correctly (from the root of the repo):
-
-```
-cp sound/target/release/sound .
-```
-
-Then you can create a new python virtualenv (from the root of the repo):
-
-```
-python3 -m venv .venv
-source .venv/bin/activate
-pip3 install -r requirements.txt
-python3 main.py
-```
-
-Then you can send a `GET` request to http://127.0.0.1/?code=<your-sound-code>
+This builds and then launches a docker container with the API. You can then send a `GET` request to http://127.0.0.1:8080/?code=<your-sound-code>
 
 You should receive a binary you can execute to play the code.
